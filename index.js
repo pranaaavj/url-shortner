@@ -14,6 +14,9 @@ connectToMongoDB(
   })
   .catch(() => {});
 
+app.get("/test", (req, res) => {
+  return res.end("");
+});
 app.use(express.json());
 app.use("/", URLroute);
 
