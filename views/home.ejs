@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>URL Shortner</h1>
+    <form method="post" action="/url">
+      <label for="">Enter your original URL</label>
+      <input type="text" name="url" placeholder="https://example.com" />
+      <button type="submit">Generate</button>
+      <% if (locals.id) { %>
+      <div>
+        Here is your link
+        <a href="http://localhost:8001/url/<%=locals.id%>"
+          >http://localhost:8001/url/<%= locals.id %></a
+        >
+      </div>
+    </form>
+    <div>
+      <% } %> <% if (locals.urls) { %>
+      <table>
+        <thead>
+          <th>S.NO</th>
+          <th>ShortID</th>
+          <th>RedirectURL</th>
+          <th>Clicks</th>
+        </thead>
+        <tbody>
+          <% urls.forEach((url, index )=> { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= url.shortId %></td>
+            <td><%= url.redirectURL %></td>
+            <td><%= url.visitHistory.length %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </body>
+</html>
