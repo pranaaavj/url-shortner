@@ -10,7 +10,7 @@ async function restrictToLoggedInUserOnly(req, res, next) {
   if (!user) return res.redirect('/login');
 
   req.user = user;
-  console.log('hi');
+
   next();
 }
 
