@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const { restrictToLoggedInUserOnly, checkAuth } = require('./middlewares/auth');
+const { checkAuthencationHeader, restrictTo } = require('./middlewares/auth');
 const { connectToMongoDB } = require('./connection');
 
 const URLroute = require('./routes/url');
@@ -16,9 +16,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 
 //mongo Connection
-connectToMongoDB(
-  'mongodb+srv://jpvelloor:brototype@url-shortner.mazujup.mongodb.net/?retryWrites=true&w=majority&appName=URL-shortner'
-)
+connectToMongoDB('mongodb://127.0.0.1:27017/urlShortner')
   .then(() => {
     console.log('Conneted to MongoDB');
   })
@@ -30,10 +28,11 @@ connectToMongoDB(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(checkAuthencationHeader);
 
-app.use('/url', restrictToLoggedInUserOnly, URLroute);
+app.use('/url', restrictTo(['NORMAL', 'ADMIN']), URLroute);
 app.use('/user', userRoute);
-app.use('/', checkAuth, staticRoute);
+app.use('/', staticRoute);
 
 //Server Listening
 app.listen(PORT, () => {
